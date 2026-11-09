@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل المصروفات التشغيلية</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        .summary-box {
+            background: #e8f4fd;
+            border-right: 5px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .form-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #fafafa;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #eee;
+        }
+        input, select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            grid-column: span 1;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>سجل المصروفات التشغيلية</h2>
+    
+    <div class="summary-box">
+        إجمالي المصروفات: <span id="total-amount">0</span> ليرة
+    </div>
+
+    <div class="form-group">
+        <input type="date" id="exp-date">
+        <input type="text" id="exp-name" placeholder="بند المصروف (مثل: كهرباء، إيجار)">
+        <select id="exp-category">
+            <option value="تشغيلي">تشغيلي</option>
+            <option value="صيانة">صيانة</option>
+            <option value="رواتب">رواتب</option>
+            <option value="أخرى">أخرى</option>
+        </select>
+        <input type="number" id="exp-cost" placeholder="المبلغ">
+        <button onclick="addExpense()">إضافة مصروف</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>التاريخ</th>
+                <th>البند</th>
+                <th>الفئة</th>
+                <th>المبلغ</th>
+            </tr>
+        </thead>
+        <tbody id="expense-table-body">
+            <!-- سيتم إضافة البيانات هنا ديناميكياً -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    let total = 0;
+
+    function addExpense() {
+        const date = document.getElementById('exp-date').value;
+        const name = document.getElementById('exp-name').value;
+        const category = document.getElementById('exp-category').value;
+        const cost = parseFloat(document.getElementById('exp-cost').value);
+
+        if (!date || !name || isNaN(cost) || cost <= 0) {
+            alert('الرجاء إدخال كافة البيانات بشكل صحيح!');
+            return;
+        }
+
+        const tableBody = document.getElementById('expense-table-body');
+        const newRow = document.createElement('tr');
+
+        newRow.innerHTML = `
+            <td>${date}</td>
+            <td>${name}</td>
+            <td>${category}</td>
+            <td>${cost.toLocaleString()}</td>
+        `;
+
+        tableBody.appendChild(newRow);
+
+        // تحديث المجموع
+        total += cost;
+        document.getElementById('total-amount').innerText = total.toLocaleString();
+
+        // تفريغ الحقول
+        document.getElementById('exp-name').value = '';
+        document.getElementById('exp-cost').value = '';
+    }
+</script>
+
+</body>
+</html>
